@@ -37,6 +37,7 @@ require 'shoryuken/processor'
 require 'shoryuken/body_parser'
 require 'shoryuken/fetcher'
 require 'shoryuken/options'
+require 'shoryuken/azure'
 
 module Shoryuken
   extend SingleForwardable

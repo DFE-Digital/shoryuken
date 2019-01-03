@@ -1,0 +1,2 @@
+require 'shoryuken/azure/client'
+
