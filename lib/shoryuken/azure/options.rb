@@ -22,13 +22,13 @@ module Shoryuken
         end
 
         def service_bus_host
+          raise InvalidServiceBusNamespace unless service_bus_namespace
+
           "https://#{service_bus_namespace}.#{SERVICE_BUS_DOMAIN}"
         end
 
         def service_bus_client
           @service_bus_client ||= begin
-            raise InvalidServiceBusNamespace unless service_bus_namespace
-
             signer = ::Azure::ServiceBus::Auth::SharedAccessSigner.new
             ::Azure::ServiceBus::ServiceBusService.new(service_bus_host, signer: signer)
           end

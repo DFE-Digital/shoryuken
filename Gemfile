@@ -11,6 +11,7 @@ group :test do
   gem 'httparty'
   gem 'multi_xml'
   gem 'simplecov'
+  gem 'azure'
 end
 
 group :development do

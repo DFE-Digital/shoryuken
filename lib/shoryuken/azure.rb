@@ -1,3 +1,4 @@
+require 'azure'
 require 'shoryuken/azure/client_extension'
 require 'shoryuken/azure/options'
 
