@@ -16,11 +16,6 @@ module Shoryuken
 
           queue
         end
-
-        def register_azure_queue(name)
-          azure_queue = Shoryuken::Azure::Queue.new(name.to_s)
-          add_queue(name.to_s, azure_queue)
-        end
       end
 
     end

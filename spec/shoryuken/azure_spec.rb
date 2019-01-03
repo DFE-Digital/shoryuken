@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Shoryuken::Azure do
+RSpec.describe Shoryuken::Azure do
   before do
     Shoryuken::Azure::Options.class_variable_set('@@service_bus', nil)
   end

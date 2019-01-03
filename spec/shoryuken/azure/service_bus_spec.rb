@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Shoryuken::Azure::ServiceBus do
+RSpec.describe Shoryuken::Azure::ServiceBus do
 
   describe 'instantiation' do
     describe 'with valid namespace' do
@@ -28,11 +28,25 @@ describe Shoryuken::Azure::ServiceBus do
     end
   end
 
-  describe 'retrieving azure_client' do
+  describe 'retrieving api_client' do
     let(:bus) { described_class.new('testing') }
 
     it 'should be service bus instance' do
-      expect(bus.azure_client).to be_instance_of(::Azure::ServiceBus::ServiceBusService)
+      expect(bus.api_client).to be_instance_of(::Azure::ServiceBus::ServiceBusService)
+    end
+  end
+
+  describe 'adding a queue' do
+    let(:bus) { described_class.new('testing') }
+    before { @queue = bus.add_queue 'myqueue' }
+
+    it 'returns a Shoryuken Azure Queue' do
+      expect(@queue).to be_instance_of(Shoryuken::Azure::Queue)
+    end
+
+    it 'adds it to the global Shoryuken queue list' do
+      q = Shoryuken::Client.queues('myqueue')
+      expect(q).to be_instance_of(Shoryuken::Azure::Queue)
     end
   end
 
