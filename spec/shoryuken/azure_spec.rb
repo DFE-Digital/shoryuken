@@ -2,48 +2,47 @@ require 'spec_helper'
 
 describe Shoryuken::Azure do
   before do
-    Shoryuken::Azure::Options.class_variable_set('@@service_bus_namespace', nil)
+    Shoryuken::Azure::Options.class_variable_set('@@service_bus', nil)
   end
 
-  describe '.service_bus_namespace' do
-    it 'will default to nil' do
-      expect(described_class.service_bus_namespace).to be_nil
-    end
-  end
+  describe 'registering service_bus' do
+    describe 'with valid namespace' do
+      let(:bus) { described_class.register_service_bus('testing') }
 
-  describe 'assigning service_bus_namespace' do
-    describe 'with valid name' do
-      before do
-        described_class.service_bus_namespace = 'testing'
-      end
-
-      it 'with valid' do
-        expect(described_class.service_bus_namespace).to eql 'testing'
+      it 'will return service bus' do
+        expect(bus).to be_instance_of Shoryuken::Azure::ServiceBus
       end
     end
 
-    describe 'with invalid name' do
+    describe 'with invalid namespace' do
       it 'will raise' do
         expect do
-          described_class.service_bus_namespace = 'with_underscore'
-        end.to raise_exception Shoryuken::Azure::Options::InvalidServiceBusNamespace
+          described_class.register_service_bus('with_underscore')
+        end.to raise_exception Shoryuken::Azure::ServiceBus::InvalidNamespace
+      end
+    end
+
+    describe 'with blank namespace' do
+      it 'will raise' do
+        expect do
+          described_class.register_service_bus('')
+        end.to raise_exception Shoryuken::Azure::ServiceBus::InvalidNamespace
       end
     end
   end
 
-  describe 'retrieving service_bus_client' do
-    describe 'with no namespace set' do
+  describe 'retrieving service_bus' do
+    describe 'with no bus registered' do
       it 'should raise' do
-        expect { described_class.service_bus_client }.
-          to raise_exception(Shoryuken::Azure::Options::InvalidServiceBusNamespace)
+        expect(described_class.service_bus).to be_nil
       end
     end
 
-    describe 'with namespace set' do
-      before { described_class.service_bus_namespace = 'testing' }
+    describe 'with bus registered' do
+      before { bus = described_class.register_service_bus('testing') }
 
-      it 'should contatenate' do
-        expect(described_class.service_bus_client).to be_instance_of(::Azure::ServiceBus::ServiceBusService)
+      it 'return bus' do
+        expect(described_class.service_bus).to be_instance_of(::Shoryuken::Azure::ServiceBus)
       end
     end
   end
