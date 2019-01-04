@@ -38,7 +38,7 @@ RSpec.describe Shoryuken::Azure::ServiceBus do
 
   describe 'adding a queue' do
     let(:bus) { described_class.new('testing') }
-    before { @queue = bus.add_queue 'myqueue' }
+    before { @queue = bus.register_queue 'myqueue' }
 
     it 'returns a Shoryuken Azure Queue' do
       expect(@queue).to be_instance_of(Shoryuken::Azure::Queue)

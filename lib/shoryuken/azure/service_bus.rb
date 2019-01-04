@@ -22,9 +22,12 @@ module Shoryuken
         end
       end
 
-      def add_queue(queue_name)
-        queue = Queue.new(api_client, queue_name.to_s)
-        Shoryuken::Client.register_queue(queue_name.to_s, queue)
+      def build_queue(queue_name)
+        Queue.new(self, queue_name.to_s)
+      end
+
+      def register_queue(queue_name)
+        Shoryuken::Client.register_queue(queue_name.to_s, build_queue(queue_name))
       end
 
       private
