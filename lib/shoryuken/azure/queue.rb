@@ -29,7 +29,9 @@ module Shoryuken
       def send_message(options = {})
         message = MessageBuilder.new(options)
 
-        api_client.send_queue_message(name, message)
+        opts = message.to_brokered_message
+
+        api_client.send_queue_message(name, opts)
       end
 
       def send_messages(options = {})
@@ -38,8 +40,13 @@ module Shoryuken
       end
 
       def receive_messages(options = {})
-        raise "Not yet implemented"
-        # yes but options needs to come from better source than being passed in
+        m = api_client.receive_queue_message("shoryuken", peek_lock:true)
+
+        if m
+          [ Message.new(self, m) ]
+        else
+          []
+        end
       end
 
       def fifo?
@@ -55,18 +62,6 @@ module Shoryuken
 
         @name = queue_name
         #@url  = api_client.get_queue_url(queue_name: queue_name).queue_url # TBD
-      end
-
-      def prepare_message(options)
-        message = Message.new(options)
-
-        options = { message_body: options } if options.is_a?(String)
-
-        if options[:message_body].is_a?(Hash)
-          options[:message_body] = JSON.dump(body)
-        end
-
-        Azure::ServiceBus::BrokeredMessage.new(message.serialize)
       end
 
       class InvalidQueueName < RuntimeError; end

@@ -1,9 +1,10 @@
 require 'azure'
 require 'shoryuken/azure/client_extension'
 require 'shoryuken/azure/options'
+require 'shoryuken/azure/service_bus'
 require 'shoryuken/azure/queue'
 require 'shoryuken/azure/message_builder'
-require 'shoryuken/azure/service_bus'
+require 'shoryuken/azure/message'
 
 module Shoryuken
   module Azure
